@@ -1,10 +1,11 @@
-package me.dooger.betterlvlhead.events;
+package me.dooger.betterlvlhead.events.render;
 
 import me.dooger.betterlvlhead.Main;
 import me.dooger.betterlvlhead.champstats.statapi.HPlayer;
 import me.dooger.betterlvlhead.champstats.statapi.HypixelGames;
 import me.dooger.betterlvlhead.champstats.statapi.stats.Stat;
 import me.dooger.betterlvlhead.champstats.statapi.stats.StatString;
+import me.dooger.betterlvlhead.events.render.AboveHeadDisplay;
 import me.dooger.betterlvlhead.utils.ChatColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -47,7 +48,7 @@ public class TagRenderer {
             /* Might add sk1er's idea for allowing players to view their own tags */
             //if (player.getUniqueID().equals(Minecraft.getMinecraft().thePlayer.getUniqueID()))
 
-            double offset = 0.3;
+            double offset = 0.9;
             Scoreboard scoreboard = player.getWorldScoreboard();
             ScoreObjective scoreObjective = scoreboard.getObjectiveInDisplaySlot(2);
 
@@ -97,7 +98,7 @@ public class TagRenderer {
             }
         }
 
-        int j = fontrenderer.getStringWidth(stat);
+        int j = fontrenderer.getStringWidth(stat) / 2;
         GlStateManager.disableTexture2D();
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
         worldRenderer.pos(-j - 1, -1 + i, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();

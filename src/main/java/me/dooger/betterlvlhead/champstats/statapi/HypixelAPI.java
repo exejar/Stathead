@@ -88,7 +88,7 @@ public class HypixelAPI {
             System.err.println(References.MODNAME + " setGameData: " + ex.getStackTrace().toString());
         }
 
-        return obj.get("strlevel").getAsJsonObject();
+        return obj;
     }
 
     /**

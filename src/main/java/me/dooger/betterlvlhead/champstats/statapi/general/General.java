@@ -37,9 +37,9 @@ public class General extends GeneralUtils {
         this.isNicked = false;
         this.hasPlayed = false;
         try {
-            this.level = new StatString("Level", setSk1erData(getPlayerUUID(), "LEVEL").getAsString());
-            this.quests = new StatString("Quests", setSk1erData(getPlayerUUID(), "QUESTS").getAsString());
-            this.guildname = new StatString("Guild", setSk1erData(getPlayerUUID(), "GUILD_NAME").getAsString());
+            this.level = new StatString("Level", setSk1erData(getPlayerUUID(), "LEVEL").get("strlevel").getAsString());
+            this.quests = new StatString("Quests", setSk1erData(getPlayerUUID(), "QUESTS").get("strlevel").getAsString());
+            this.guildname = new StatString("Guild", setSk1erData(getPlayerUUID(), "GUILD_NAME").get("strlevel").getAsString());
         } catch (PlayerNullException ex) {
             this.isNicked = true;
         }

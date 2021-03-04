@@ -1,5 +1,6 @@
 package me.dooger.betterlvlhead.events;
 
+import me.dooger.betterlvlhead.events.render.HPlayerDisplay;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

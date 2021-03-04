@@ -1,7 +1,10 @@
-package me.dooger.betterlvlhead.events;
+package me.dooger.betterlvlhead.events.render;
 
+import me.dooger.betterlvlhead.Main;
 import me.dooger.betterlvlhead.champstats.statapi.HPlayer;
+import me.dooger.betterlvlhead.champstats.statapi.HypixelGames;
 import me.dooger.betterlvlhead.champstats.statapi.general.General;
+import me.dooger.betterlvlhead.champstats.utils.Handler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -87,8 +90,7 @@ public class AboveHeadDisplay extends HPlayerDisplay {
             if (loadOrRender(entityPlayer)) {
                 final UUID uuid = entityPlayer.getUniqueID();
                 if (!cache.containsKey(uuid)) {
-                    HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), new General(entityPlayer.getName(), uuid.toString().replace("-", "")));
-                    cache.put(uuid, hPlayer);
+                    Main.getInstance().fetchStats(entityPlayer, HypixelGames.GENERAL);
                 }
             }
         }

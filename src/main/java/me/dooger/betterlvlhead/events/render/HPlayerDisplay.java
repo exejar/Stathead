@@ -1,4 +1,4 @@
-package me.dooger.betterlvlhead.events;
+package me.dooger.betterlvlhead.events.render;
 
 import me.dooger.betterlvlhead.champstats.statapi.HPlayer;
 
