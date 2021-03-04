@@ -6,6 +6,7 @@ import me.dooger.betterlvlhead.champstats.statapi.HypixelGames;
 import me.dooger.betterlvlhead.champstats.statapi.bedwars.Bedwars;
 import me.dooger.betterlvlhead.champstats.statapi.general.General;
 import me.dooger.betterlvlhead.champstats.utils.Handler;
+import me.dooger.betterlvlhead.commands.SetApi;
 import me.dooger.betterlvlhead.events.render.AboveHeadDisplay;
 import me.dooger.betterlvlhead.events.HeadDisplayTick;
 import me.dooger.betterlvlhead.events.render.TagRenderer;
@@ -38,6 +39,7 @@ public class Main {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         tagDisplay = new AboveHeadDisplay();
+        registerCommands(new SetApi());
         registerListeners(new TagRenderer(this), new HeadDisplayTick(tagDisplay));
     }
 

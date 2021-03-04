@@ -13,13 +13,13 @@ import java.io.Writer;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import static me.dooger.betterlvlhead.champstats.config.ModConfigNames.APIKEY;
+import static me.dooger.betterlvlhead.champstats.config.ModConfigNames.*;
 import static me.dooger.betterlvlhead.utils.References.VERSION;
 
 
 public class ModConfig {
 
-    private String apiKey;
+    private String apiKey, statMode, statName;
     private static ModConfig instance;
 
     public static ModConfig getInstance() {
@@ -34,6 +34,14 @@ public class ModConfig {
     public void setApiKey(String key) {
         this.apiKey = key;
     }
+
+    public String getStatMode() { return this.statMode; }
+
+    public String getStatName() { return this.statName; }
+
+    public void setStatMode(String mode) { this.statMode = mode; }
+
+    public void setStatName(String name) { this.statName = name; }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void makeFile() {
@@ -57,6 +65,8 @@ public class ModConfig {
     public void loadConfigFromFile() {
         if (!getFile().exists()) makeFile();
         apiKey = getString(APIKEY);
+        this.statMode = getString(STATMODE);
+        this.statName = getString(STATNAME);
     }
 
     public File getFile() {
@@ -72,6 +82,8 @@ public class ModConfig {
     public void save() {
         HashMap<String, Object> map = new HashMap<>();
         map.put(APIKEY.toString(), getApiKey());
+        map.put(STATMODE.toString(), getStatMode());
+        map.put(STATNAME.toString(), getStatName());
         try (Writer writer = new FileWriter(getFile())) {
             Handler.getGson().toJson(map, writer);
         } catch (Exception e) {
