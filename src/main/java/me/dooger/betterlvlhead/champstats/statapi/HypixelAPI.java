@@ -42,8 +42,6 @@ public class HypixelAPI {
                 obj = parser.parse(new InputStreamReader(client.execute(request).getEntity().getContent(), StandardCharsets.UTF_8)).getAsJsonObject();
                 System.out.println(References.MODNAME + " Stat Checking: " + uuid);
 
-                System.out.println();
-
                 if (obj.get("player") == null) {
                     if (obj.get("cause").getAsString().equalsIgnoreCase("Invalid API key")) throw new InvalidKeyException();
                     throw new PlayerNullException();
@@ -65,6 +63,32 @@ public class HypixelAPI {
         obj = stats.get(game.getApiName()).getAsJsonObject();
 
         return obj;
+    }
+
+    public JsonObject setSk1erData(String uuid, String data) throws PlayerNullException {
+        JsonObject obj = new JsonObject();
+        String requestUrl = String.format("https://api.sk1er.club/levelheadv5/%s/%s", uuid.replace("-", ""), data);
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(requestUrl);
+            JsonParser parser = new JsonParser();
+
+            obj = parser.parse(new InputStreamReader(client.execute(request).getEntity().getContent(), StandardCharsets.UTF_8)).getAsJsonObject();
+            System.out.println(References.MODNAME + " Stat Checking: " + uuid);
+
+            if (obj.get("success").getAsString().equalsIgnoreCase("false")) {
+                if (obj.get("reason").getAsString().contains("Type") && obj.get("reason").getAsString().contains("not found")) {
+                    System.err.println("Type not found?? EXTREME ERROR PLEASE REPORT TO MAX#9876");
+                }
+            } else if (obj.get("bot") != null) {
+                if (obj.get("bot").getAsString().equalsIgnoreCase("true")) {
+                    throw new PlayerNullException();
+                }
+            }
+        } catch (IOException ex) {
+            System.err.println(References.MODNAME + " setGameData: " + ex.getStackTrace().toString());
+        }
+
+        return obj.get("level").getAsJsonObject();
     }
 
     /**

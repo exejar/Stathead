@@ -14,6 +14,11 @@ public class StatInt extends Stat {
         super(statName, jsonName, gameObject);
     }
 
+    public StatInt(String statName, int stat) {
+        super(statName);
+        this.value = stat;
+    }
+
     public StatInt(String statName) {
         super(statName);
     }

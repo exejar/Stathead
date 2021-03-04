@@ -78,7 +78,7 @@ public abstract class HGameBase extends HypixelAPI {
         return this.hasPlayed;
     }
 
-    protected List<Stat> setStats(JsonObject gameObject, Stat... stats) {
+    protected List<Stat> setStats(Stat... stats) {
         LinkedList<Stat> statList = new LinkedList<>();
 
         for (Stat stat : stats) {

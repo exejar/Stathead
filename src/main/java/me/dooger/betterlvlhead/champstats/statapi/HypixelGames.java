@@ -8,7 +8,8 @@ public enum HypixelGames {
     ARENABRAWL("Arena", "Arena"),
     VAMPIREZ("VampireZ", "VampireZ"),
     BLITZ("HungerGames", "Blitz"),
-    PIT("Pit", "Pit");
+    PIT("Pit", "Pit"),
+    GENERAL("General", "General");
 
     private String apiName, gameName;
 

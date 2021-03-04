@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.dooger.betterlvlhead.utils.ChatUtils;
 import me.dooger.betterlvlhead.champstats.utils.Handler;
-
+import me.dooger.betterlvlhead.utils.References;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import static me.dooger.betterlvlhead.utils.References.VERSION;
 
 public class ModConfig {
 
-    private static String apiKey;
+    private String apiKey;
     private static ModConfig instance;
 
     public static ModConfig getInstance() {
@@ -28,11 +28,11 @@ public class ModConfig {
     }
 
     public String getApiKey() {
-        return apiKey;
+        return this.apiKey;
     }
 
     public void setApiKey(String key) {
-        apiKey = key;
+        this.apiKey = key;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -61,7 +61,7 @@ public class ModConfig {
 
     public File getFile() {
         String here = Paths.get("").toAbsolutePath().toString();
-        String file = here + File.separator + "StatsOnJoin" + File.separator + "config.json";
+        String file = here + File.separator + References.MODID + File.separator + "config.json";
         return new File(file);
     }
 

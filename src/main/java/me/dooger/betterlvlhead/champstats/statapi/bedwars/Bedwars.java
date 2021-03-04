@@ -28,7 +28,7 @@ public class Bedwars extends BedwarsUtils {
         if (setData(HypixelGames.BEDWARS)) {
             statList = new ArrayList<>();
             formattedStatList = new ArrayList<>();
-            statList = setStats(bedwarsJson,
+            statList = setStats(
                     star = new StatInt("Star", "bedwars_level", achievementObj),
                     gamesPlayed = new StatInt("Games Played", "games_played_bedwars", bedwarsJson),
                     finalKills = new StatInt("Final Kills", "final_kills_bedwars", bedwarsJson),

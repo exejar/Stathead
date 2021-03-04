@@ -14,6 +14,11 @@ public class StatDouble extends Stat {
         super(statName, jsonName, gameObject);
     }
 
+    public StatDouble(String statName, double stat) {
+        super(statName);
+        this.value = stat;
+    }
+
     public StatDouble(String statName) {
         super(statName);
     }
