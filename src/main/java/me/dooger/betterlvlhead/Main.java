@@ -9,6 +9,7 @@ import me.dooger.betterlvlhead.champstats.utils.Handler;
 import me.dooger.betterlvlhead.events.render.AboveHeadDisplay;
 import me.dooger.betterlvlhead.events.HeadDisplayTick;
 import me.dooger.betterlvlhead.events.render.TagRenderer;
+import me.dooger.betterlvlhead.utils.ChatUtils;
 import me.dooger.betterlvlhead.utils.References;
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,6 +83,7 @@ public class Main {
             HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), gameBase);
 
             tagDisplay.getCache().put(uuid, hPlayer);
+            tagDisplay.removeFromStatAssembly(uuid);
         });
     }
 }

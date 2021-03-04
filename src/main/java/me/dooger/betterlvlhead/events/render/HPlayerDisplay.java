@@ -14,6 +14,7 @@ public abstract class HPlayerDisplay {
      */
 
     protected final ConcurrentHashMap<UUID, HPlayer> cache = new ConcurrentHashMap<>();
+    protected final List<UUID> statAssembly = new ArrayList<>();
     protected final List<UUID> existedMoreThan5Seconds = new ArrayList<>();
     protected final Map<UUID, Integer> timeCheck = new HashMap<>();
 
@@ -33,6 +34,15 @@ public abstract class HPlayerDisplay {
 
     public Map<UUID, Integer> getTimeCheck() {
         return timeCheck;
+    }
+
+    /* Returns a list of players that are currently being stat checked */
+    public List<UUID> getStatAssembly() {
+        return this.statAssembly;
+    }
+
+    public void removeFromStatAssembly(UUID uuid) {
+        this.statAssembly.remove(uuid);
     }
 
 }
