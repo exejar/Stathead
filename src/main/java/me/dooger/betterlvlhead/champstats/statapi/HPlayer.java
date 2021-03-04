@@ -24,9 +24,6 @@ public class HPlayer {
         for (HGameBase game : gameBase) {
             this.gameStatMap.put(game.getGame().getGameName(), game.getFormattedStatList());
         }
-
-
-
     }
 
     public HPlayer(String playerUUID, String playerName) {

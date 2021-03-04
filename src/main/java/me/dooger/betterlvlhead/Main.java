@@ -1,5 +1,8 @@
 package me.dooger.betterlvlhead;
 
+import me.dooger.betterlvlhead.events.AboveHeadDisplay;
+import me.dooger.betterlvlhead.events.HeadDisplayTick;
+import me.dooger.betterlvlhead.events.TagRenderer;
 import me.dooger.betterlvlhead.utils.References;
 import net.minecraft.command.ICommand;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -14,6 +17,8 @@ import java.util.Arrays;
 @Mod(modid = References.MODID, name = References.MODNAME, clientSideOnly = true, version = References.VERSION, acceptedMinecraftVersions = "1.8.9")
 public class Main {
 
+    private AboveHeadDisplay tagDisplay;
+
     private static Main instance;
 
     @Mod.EventHandler
@@ -23,6 +28,8 @@ public class Main {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        tagDisplay = new AboveHeadDisplay();
+        registerListeners(new TagRenderer(this), new HeadDisplayTick(tagDisplay));
     }
 
     @Mod.EventHandler
@@ -40,4 +47,6 @@ public class Main {
     private void registerCommands(ICommand... command) {
         Arrays.stream(command).forEachOrdered(ClientCommandHandler.instance::registerCommand);
     }
+
+    public AboveHeadDisplay getTagDisplay() { return this.tagDisplay; }
 }

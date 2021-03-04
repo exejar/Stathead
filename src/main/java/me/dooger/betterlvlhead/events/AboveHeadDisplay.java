@@ -1,5 +1,7 @@
 package me.dooger.betterlvlhead.events;
 
+import me.dooger.betterlvlhead.champstats.statapi.HPlayer;
+import me.dooger.betterlvlhead.champstats.statapi.general.General;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -80,6 +82,14 @@ public class AboveHeadDisplay extends HPlayerDisplay {
                         existedMoreThan5Seconds.add(entityPlayer.getUniqueID());
                 } else if (!entityPlayer.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer))
                     timeCheck.put(entityPlayer.getUniqueID(), old + 1);
+            }
+
+            if (loadOrRender(entityPlayer)) {
+                final UUID uuid = entityPlayer.getUniqueID();
+                if (!cache.containsKey(uuid)) {
+                    HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), new General(entityPlayer.getName(), uuid.toString().replace("-", "")));
+                    cache.put(uuid, hPlayer);
+                }
             }
         }
     }
