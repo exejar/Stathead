@@ -2,9 +2,7 @@ package me.dooger.betterlvlhead.events;
 
 import me.dooger.betterlvlhead.champstats.statapi.HPlayer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class HPlayerDisplay {
@@ -12,10 +10,12 @@ public abstract class HPlayerDisplay {
     /**
      * This class's base was taken from sk1er's Levelhead Mod.
      * Wanted to keep his cache method as it works totally fine and does not need many changes.
+     * Also wanted the original mod's rendering system to be as similar as possible to this mod's.
      */
 
     protected final ConcurrentHashMap<UUID, HPlayer> cache = new ConcurrentHashMap<>();
     protected final List<UUID> existedMoreThan5Seconds = new ArrayList<>();
+    protected final Map<UUID, Integer> timeCheck = new HashMap<>();
 
     public abstract void onTick();
 
@@ -29,6 +29,10 @@ public abstract class HPlayerDisplay {
 
     public List<UUID> getExistedMoreThan5Seconds() {
         return this.existedMoreThan5Seconds;
+    }
+
+    public Map<UUID, Integer> getTimeCheck() {
+        return timeCheck;
     }
 
 }
