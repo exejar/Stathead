@@ -1,6 +1,5 @@
 package me.dooger.betterlvlhead.champstats.statapi.general;
 
-import com.google.gson.JsonObject;
 import me.dooger.betterlvlhead.champstats.statapi.HPlayer;
 import me.dooger.betterlvlhead.champstats.statapi.HypixelGames;
 import me.dooger.betterlvlhead.champstats.statapi.exception.PlayerNullException;
@@ -14,15 +13,12 @@ import java.util.List;
 
 public class General extends GeneralUtils {
 
-    private JsonObject generalJson;
     private List<Stat> statList;
-    private List<Stat> formattedStatList;
     public Stat level, quests, guildname;
 
     public General(String playerName, String playerUUID) {
         super(playerName, playerUUID);
         statList = new ArrayList<>();
-        formattedStatList = new ArrayList<>();
         if (setData(HypixelGames.GENERAL)) {
             statList.add(level);
             statList.add(quests);
@@ -40,9 +36,10 @@ public class General extends GeneralUtils {
     public boolean setData(HypixelGames game) {
         this.isNicked = false;
         this.hasPlayed = false;
-        JsonObject obj = null;
         try {
-            obj = setSk1erData(getPlayerUUID(), "LEVEL");
+            this.level = new StatString("Level", setSk1erData(getPlayerUUID(), "LEVEL").getAsString());
+            this.quests = new StatString("Quests", setSk1erData(getPlayerUUID(), "QUESTS").getAsString());
+            this.guildname = new StatString("Guild", setSk1erData(getPlayerUUID(), "GUILD_NAME").getAsString());
         } catch (PlayerNullException ex) {
             this.isNicked = true;
         }
@@ -50,7 +47,6 @@ public class General extends GeneralUtils {
         try {
             if (!this.isNicked) {
                 this.hasPlayed = true;
-                this.generalJson = obj;
                 return true;
             }
             return false;
@@ -76,16 +72,17 @@ public class General extends GeneralUtils {
 
     @Override
     public List<Stat> getStatList() {
-        return null;
+        return this.statList;
     }
 
     @Override
     public List<Stat> getFormattedStatList() {
-        return null;
+        return this.statList;
     }
 
     @Override
     public void setFormattedStatList() {
-
     }
+
+
 }
