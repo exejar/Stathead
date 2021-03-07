@@ -1,12 +1,12 @@
-package me.dooger.betterlvlhead.champstats.statapi;
+package me.exejar.stathead.champstats.statapi;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import me.dooger.betterlvlhead.champstats.config.ModConfig;
-import me.dooger.betterlvlhead.champstats.statapi.exception.ApiRequestException;
-import me.dooger.betterlvlhead.champstats.statapi.exception.InvalidKeyException;
-import me.dooger.betterlvlhead.champstats.statapi.exception.PlayerNullException;
-import me.dooger.betterlvlhead.utils.References;
+import me.exejar.stathead.champstats.config.ModConfig;
+import me.exejar.stathead.champstats.statapi.exception.ApiRequestException;
+import me.exejar.stathead.champstats.statapi.exception.InvalidKeyException;
+import me.exejar.stathead.champstats.statapi.exception.PlayerNullException;
+import me.exejar.stathead.utils.References;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -29,7 +29,7 @@ public class HypixelAPI {
      * @throws PlayerNullException If Target Player UUID is returned Null from the Hypixel API
      * @throws ApiRequestException If any other exception is thrown during the request
      */
-    public JsonObject setGameData(String uuid, HypixelGames game) throws InvalidKeyException, PlayerNullException, ApiRequestException {
+    public JsonObject getGameData(String uuid, HypixelGames game) throws InvalidKeyException, PlayerNullException, ApiRequestException {
         JsonObject obj = new JsonObject();
         if (key == null) {
             throw new InvalidKeyException();
@@ -65,6 +65,42 @@ public class HypixelAPI {
         return obj;
     }
 
+    public JsonObject getPlayerData(String uuid) throws InvalidKeyException, PlayerNullException, ApiRequestException {
+        JsonObject obj = new JsonObject();
+        if (key == null) {
+            throw new InvalidKeyException();
+        } else {
+            String requestURL = String.format("https://api.hypixel.net/player?key=%s&uuid=%s", key, uuid.replace("-", ""));
+            try (CloseableHttpClient client = HttpClients.createDefault()) {
+                HttpGet request = new HttpGet(requestURL);
+                JsonParser parser = new JsonParser();
+
+                obj = parser.parse(new InputStreamReader(client.execute(request).getEntity().getContent(), StandardCharsets.UTF_8)).getAsJsonObject();
+                System.out.println(References.MODNAME + " Stat Checking: " + uuid);
+
+                if (obj.get("player") == null) {
+                    if (obj.get("cause").getAsString().equalsIgnoreCase("Invalid API key")) throw new InvalidKeyException();
+                    throw new PlayerNullException();
+                }
+                else if (obj.get("player").toString().equalsIgnoreCase("null"))
+                    throw new PlayerNullException();
+                else if (obj.get("success").getAsString().equals("false"))
+                    throw new ApiRequestException();
+            } catch (IOException ex) {
+                System.err.println(References.MODNAME + " setGameData: " + ex.getStackTrace().toString());
+            }
+        }
+
+        JsonObject player = obj.get("player").getAsJsonObject();
+        this.achievementObj = player.get("achievements").getAsJsonObject();
+
+        return obj;
+    }
+
+    @Deprecated
+    /* Removed as per request from sk1er. Although, I do believe this to be a better request method than the one provided in Levelhead.
+    *  This project is not associated with Sk1er.
+    */
     public JsonObject setSk1erData(String uuid, String data) throws PlayerNullException {
         JsonObject obj = new JsonObject();
         String requestUrl = String.format("https://api.sk1er.club/levelheadv5/%s/%s", uuid.replace("-", ""), data);
