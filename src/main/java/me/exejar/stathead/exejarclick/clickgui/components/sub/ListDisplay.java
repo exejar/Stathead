@@ -107,14 +107,24 @@ public class ListDisplay extends Component {
     }
 
     public void updateList(List<String> entries) {
-        this.subComponents.clear();
+        /* Could use a concurrent CopyOnWriteArrayList, although this is the exact same outcome. */
         int elementHeight = ClickGui.barHeight;
-        int spacer = y + elementHeight;
+        int spacer = elementHeight;
+
+        List<Component> comp = new ArrayList<>();
 
         for (String s : entries) {
-            this.subComponents.add(new EntryButton(s, this, y, spacer));
+            EntryButton button = new EntryButton(s, this, spacer, elementHeight);
+
+            if (entries.indexOf(s) == 0) {
+                button.setSelected(true);
+            }
+
+            comp.add(new EntryButton(s, this, spacer, elementHeight));
             spacer += elementHeight;
         }
+
+        this.subComponents = comp;
     }
 
     public boolean isMouseOnEntryList(int x, int y) {

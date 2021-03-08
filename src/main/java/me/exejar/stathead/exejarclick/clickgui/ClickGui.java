@@ -21,7 +21,7 @@ public class ClickGui extends GuiScreen {
     private boolean rainbow;
 
     public ClickGui() {
-        mainFrame = new Frame("StatHead", 0, 0);
+        mainFrame = new Frame("Stathead", 0, 0);
     }
 
     @Override

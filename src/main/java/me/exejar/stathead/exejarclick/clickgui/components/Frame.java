@@ -1,11 +1,13 @@
 package me.exejar.stathead.exejarclick.clickgui.components;
 
+import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.exejarclick.clickgui.ClickGui;
 import me.exejar.stathead.exejarclick.clickgui.components.sub.ListDisplay;
 import me.exejar.stathead.exejarclick.clickgui.util.CustomFontRenderer;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Frame {
@@ -30,18 +32,14 @@ public class Frame {
         int spacer = ClickGui.barHeight;
 
         List<String> gameEntryList = new ArrayList<>();
-        gameEntryList.add("General");
-        gameEntryList.add("Bedwars");
-        gameEntryList.add("Skywars");
-        gameEntryList.add("Duels");
+        for (HypixelGames game : HypixelGames.values()) {
+            gameEntryList.add(game.getGameName());
+        }
 
-        List<String> statEntryList = new ArrayList<>();
-        statEntryList.add("Level");
-        statEntryList.add("AP");
-        statEntryList.add("Quests");
+        List<String> statEntryList = new ArrayList<>(Arrays.asList(HypixelGames.GENERAL.getStatNames()));
 
         gameList = new ListDisplay(this, "Games", this.x, this.y, 100, 0, gameEntryList, true);
-        statList = new ListDisplay(this, "Stats", this.x, this.y, 100, this.width - 100, statEntryList, true);
+        statList = new ListDisplay(this, "Stats", this.x, this.y, 100, this.width - 100, statEntryList, false);
 
         this.components.add(statList);
         this.components.add(gameList);
@@ -64,8 +62,8 @@ public class Frame {
         }
     }
 
-    public void refreshLists() {
-
+    public void refreshList(List<String> update) {
+        this.statList.updateList(update);
     }
 
     public int getX() { return this.x; }

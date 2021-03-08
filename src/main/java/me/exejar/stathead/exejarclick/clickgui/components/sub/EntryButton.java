@@ -1,11 +1,16 @@
 package me.exejar.stathead.exejarclick.clickgui.components.sub;
 
 import me.exejar.stathead.Main;
+import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.exejarclick.clickgui.ClickGui;
 import me.exejar.stathead.exejarclick.clickgui.components.Component;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
+import org.apache.commons.lang3.EnumUtils;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class EntryButton extends Component {
 
@@ -32,7 +37,12 @@ public class EntryButton extends Component {
         }
 
         RenderingUtils.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, this.hovered ? new Color(rectColor).darker().getRGB() : rectColor);
-        Main.fontRenderer.drawString(this.name, this.x + 2, this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
+        if (this.listParent.gameList) {
+            Main.fontRenderer.drawString(this.name, this.x + 2, this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
+        } else {
+            Main.fontRenderer.drawString(this.name, this.x + width - (Main.fontRenderer.getWidth(this.name) + 2), this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
+        }
+
     }
 
     @Override
@@ -46,7 +56,13 @@ public class EntryButton extends Component {
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if (isMouseOnButton(mouseX, mouseY) && button == 0 && this.listParent.open) {
             if (this.listParent.gameList) {
-                this.listParent.parent.refreshLists();
+                List<String> gameStats = new ArrayList<>();
+
+                if (EnumUtils.isValidEnum(HypixelGames.class, this.name.toUpperCase())) {
+                    String[] statNames = HypixelGames.valueOf(this.name.toUpperCase()).getStatNames();
+                    gameStats.addAll(Arrays.asList(statNames));
+                    this.listParent.parent.refreshList(gameStats);
+                }
             }
 
             selected = true;
@@ -67,6 +83,11 @@ public class EntryButton extends Component {
 
     public boolean isMouseOnButton(int x, int y) {
         return x > this.x && x < this.x + this.width && y > this.y && y < this.y + this.height;
+    }
+
+    public void setSelected(boolean selected) {
+        /* Add config save method here */
+        this.selected = selected;
     }
 
 }
