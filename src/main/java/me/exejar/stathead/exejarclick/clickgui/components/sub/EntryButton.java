@@ -31,8 +31,6 @@ public class EntryButton extends Component {
             rectColor = ClickGui.subColor.darker().getRGB();
         }
 
-//        return x > this.x && x < this.x + this.listParent.parent.getWidth() && y > this.y && y < this.y + this.height;
-
         RenderingUtils.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, this.hovered ? new Color(rectColor).darker().getRGB() : rectColor);
         Main.fontRenderer.drawString(this.name, this.x + 2, this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
     }
@@ -47,9 +45,12 @@ public class EntryButton extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if (isMouseOnButton(mouseX, mouseY) && button == 0 && this.listParent.open) {
-            this.listParent.parent.refreshLists();
+            if (this.listParent.gameList) {
+                this.listParent.parent.refreshLists();
+            }
+
             selected = true;
-        } else {
+        } else if (this.listParent.isMouseOnEntryList(mouseX, mouseY)) {
             selected = false;
         }
     }

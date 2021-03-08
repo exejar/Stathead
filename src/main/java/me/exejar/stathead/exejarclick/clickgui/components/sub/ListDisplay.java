@@ -117,4 +117,8 @@ public class ListDisplay extends Component {
         }
     }
 
+    public boolean isMouseOnEntryList(int x, int y) {
+        return x > this.x && x < this.x + this.width && y > this.y + this.height && y < this.y + this.height + (this.height * this.subComponents.size() + 1);
+    }
+
 }
