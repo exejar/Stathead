@@ -10,6 +10,7 @@ import me.exejar.stathead.commands.SetApi;
 import me.exejar.stathead.events.render.AboveHeadDisplay;
 import me.exejar.stathead.events.HeadDisplayTick;
 import me.exejar.stathead.events.render.TagRenderer;
+import me.exejar.stathead.exejarclick.clickgui.util.CustomFontRenderer;
 import me.exejar.stathead.utils.References;
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -29,10 +31,12 @@ public class Main {
     private AboveHeadDisplay tagDisplay;
 
     private static Main instance;
+    public static CustomFontRenderer fontRenderer;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         instance = this;
+        fontRenderer = new CustomFontRenderer(new Font("Tahoma", Font.PLAIN, 16), true);
     }
 
     @Mod.EventHandler

@@ -105,5 +105,4 @@ public class General extends GeneralUtils {
         formattedStatList.add(achievementPoints);
     }
 
-
 }
