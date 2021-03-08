@@ -13,8 +13,12 @@ public abstract class GeneralUtils extends HGameBase {
         return new DecimalFormat("##.##").format(o);
     }
 
-    public String getNetworkLevel(long xp) {
+    public String getNetworkLevelPrecise(long xp) {
         return plsSplit((Math.sqrt(xp + 15312.5) - (125 / Math.sqrt(2))) / (25 * Math.sqrt(2)));
+    }
+
+    public String getNetworkLevel(long xp) {
+        return Integer.toString((int)((Math.sqrt(xp + 15312.5) - (125 / Math.sqrt(2))) / (25 * Math.sqrt(2))));
     }
 
 }

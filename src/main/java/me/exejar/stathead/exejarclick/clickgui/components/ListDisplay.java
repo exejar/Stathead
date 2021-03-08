@@ -44,7 +44,7 @@ public class ListDisplay extends Component {
     @Override
     public void renderComponent(int color) {
         RenderingUtils.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, this.hovered ? new Color(color).darker().getRGB() : color);
-        Main.fontRenderer.drawString(this.name, this.x + ((float)(this.width / 2) - (Main.fontRenderer.getWidth(this.name) / 2)), this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
+        Main.fontRenderer.drawStringWithShadow(this.name, this.x + ((float)(this.width / 2) - (Main.fontRenderer.getWidth(this.name) / 2)), this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
 
         if (this.open) {
             for (Component component : subComponents) {
