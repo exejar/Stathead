@@ -15,11 +15,13 @@ public class ClickGui extends GuiScreen {
     public static int frameHeight = 350;
     public static int barHeight = 15;
     public static Color rectColor = new Color(55, 55, 55, 180);
+    private Color headerColor = new Color(255, 80, 80, 180);
+    public static Color subColor = new Color(40, 200, 255, 180);
     public int color;
     private boolean rainbow;
 
     public ClickGui() {
-        mainFrame = new Frame("StatHead", this.width / 2 - frameWidth / 2, this.height / 2 - frameHeight / 2 );
+        mainFrame = new Frame("StatHead", 0, 0);
     }
 
     @Override
@@ -29,6 +31,11 @@ public class ClickGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
+        if (rainbow) {
+            color = Color.HSBtoRGB(System.currentTimeMillis() % 1500L / 1500.0f, 0.7f, 1.0f);
+        } else {
+            color = headerColor.getRGB();
+        }
         mainFrame.renderFrame(Main.fontRenderer, color);
         mainFrame.updatePosition(mouseX, mouseY);
         for (Component component : mainFrame.getComponents()) {

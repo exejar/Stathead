@@ -15,6 +15,7 @@ public class Frame {
     private int x, y, barHeight, width, height;
     public int dragX, dragY;
     private boolean dragging;
+    private ListDisplay gameList, statList;
 
     public Frame(String name, int x, int y) {
         this.components = new ArrayList<>();
@@ -26,14 +27,29 @@ public class Frame {
         this.width = ClickGui.frameWidth;
         this.height = ClickGui.frameHeight;
 
-        ListDisplay gameList = new ListDisplay();
-        ListDisplay statList = new ListDisplay();
+        int spacer = ClickGui.barHeight;
+
+        List<String> gameEntryList = new ArrayList<>();
+        gameEntryList.add("General");
+        gameEntryList.add("Bedwars");
+        gameEntryList.add("Skywars");
+        gameEntryList.add("Duels");
+
+        List<String> statEntryList = new ArrayList<>();
+        statEntryList.add("Level");
+        statEntryList.add("AP");
+        statEntryList.add("Quests");
+
+        gameList = new ListDisplay(this, "Games", this.x, this.y, 100, 0, gameEntryList, true);
+        statList = new ListDisplay(this, "Stats", this.x, this.y, 100, this.width - 100, statEntryList, true);
+
         this.components.add(statList);
         this.components.add(gameList);
     }
 
     public void renderFrame(CustomFontRenderer fontRenderer, int color) {
         RenderingUtils.drawRect(this.x, this.y, this.x + this.width, this.y + this.barHeight, color);
+        RenderingUtils.drawRect(this.x, this.y + this.barHeight, this.x + this.width, this.y + this.barHeight + this.height, ClickGui.rectColor.getRGB());
         fontRenderer.drawString(this.name, (this.x + (float)(this.width / 2 - fontRenderer.getWidth(this.name) / 2)), this.y + (float)(this.barHeight / 2 - fontRenderer.getHeight(this.name) / 2), 0xFFFFFFFF);
 
         for (Component component : components) {
@@ -45,8 +61,11 @@ public class Frame {
         int off = this.barHeight;
         for (Component component : components) {
             component.setOff(off);
-            off += component.getHeight();
         }
+    }
+
+    public void refreshLists() {
+
     }
 
     public int getX() { return this.x; }

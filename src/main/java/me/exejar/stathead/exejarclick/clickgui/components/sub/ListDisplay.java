@@ -1,6 +1,7 @@
 package me.exejar.stathead.exejarclick.clickgui.components.sub;
 
 import me.exejar.stathead.Main;
+import me.exejar.stathead.exejarclick.clickgui.ClickGui;
 import me.exejar.stathead.exejarclick.clickgui.components.Component;
 import me.exejar.stathead.exejarclick.clickgui.components.Frame;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
@@ -12,31 +13,40 @@ import java.util.List;
 public class ListDisplay extends Component {
 
     public Frame parent;
-    public int offset;
+    public int x, y, width, yoff, xoff;
     private boolean hovered;
     public boolean open;
     private List<Component> subComponents;
     private int height;
+    public boolean gameList;
+    public String name;
 
-    public ListDisplay(Frame parent, int offset, List<String> entries) {
+    public ListDisplay(Frame parent, String name, int x, int y, int yoff, int xoff, List<String> entries, boolean gameList) {
         this.parent = parent;
-        this.offset = offset;
+        this.name = name;
+        this.x = x + xoff;
+        this.y = y + yoff;
+        this.yoff = yoff;
+        this.xoff = xoff;
         this.subComponents = new ArrayList<>();
+        this.gameList = gameList;
 
-        int elementHeight = 20;
+        this.width = 100;
+
+        int elementHeight = ClickGui.barHeight;
         this.height = elementHeight;
-        int spacer = offset + elementHeight;
+        int spacer = this.y + elementHeight;
 
         for (String s : entries) {
-            this.subComponents.add(new EntryButton(s, this, offset, spacer));
+            this.subComponents.add(new EntryButton(s, this, spacer, elementHeight));
             spacer += elementHeight;
         }
     }
 
     @Override
     public void renderComponent(int color) {
-        RenderingUtils.drawRect(parent.getX(), parent.getY() + offset, parent.getX() + parent.getWidth(), parent.getY() + this.height + offset, this.hovered ? new Color(color).darker().getRGB() : color);
-        Main.fontRenderer.drawString(this.parent.name, parent.getX() + 2, parent.getY() + offset + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.parent.name) / 2), Color.WHITE.getRGB());
+        RenderingUtils.drawRect(this.x, this.y, this.x + this.width, this.y + this.height, this.hovered ? new Color(color).darker().getRGB() : color);
+        Main.fontRenderer.drawString(this.name, this.x + ((float)(this.width / 2) - (Main.fontRenderer.getWidth(this.name) / 2)), this.y + (float)(this.height / 2 - Main.fontRenderer.getHeight(this.name) / 2), Color.WHITE.getRGB());
 
         if (this.open) {
             for (Component component : subComponents) {
@@ -48,6 +58,8 @@ public class ListDisplay extends Component {
     @Override
     public void updateComponent(int mouseX, int mouseY) {
         this.hovered = isMouseOnButton(mouseX, mouseY);
+        this.y = parent.getY() + this.yoff;
+        this.x = parent.getX() + this.xoff;
         for (Component component : this.subComponents) {
             component.updateComponent(mouseX, mouseY);
         }
@@ -55,7 +67,7 @@ public class ListDisplay extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if (isMouseOnButton(mouseX, mouseY) & button == 1) {
+        if (isMouseOnButton(mouseX, mouseY) & (button == 0 || button == 1)) {
             this.open = !this.open;
             this.parent.refresh();
         }
@@ -73,8 +85,9 @@ public class ListDisplay extends Component {
 
     @Override
     public void setOff(int newOff) {
-        offset = newOff;
-        int spacer = offset + this.height;
+        int spacer = newOff;
+        System.out.println(spacer);
+
         for (Component component : this.subComponents) {
             component.setOff(spacer);
             spacer += this.height;
@@ -90,7 +103,18 @@ public class ListDisplay extends Component {
     }
 
     public boolean isMouseOnButton(int x, int y) {
-        return x > parent.getX() && x < parent.getX() + parent.getWidth() && y > this.parent.getY() + this.offset && y < this.parent.getY() + this.height + this.offset;
+        return x > this.x && x < this.x + this.width && y > this.y && y < this.height + this.y;
+    }
+
+    public void updateList(List<String> entries) {
+        this.subComponents.clear();
+        int elementHeight = ClickGui.barHeight;
+        int spacer = y + elementHeight;
+
+        for (String s : entries) {
+            this.subComponents.add(new EntryButton(s, this, y, spacer));
+            spacer += elementHeight;
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import me.exejar.stathead.champstats.statapi.bedwars.Bedwars;
 import me.exejar.stathead.champstats.statapi.general.General;
 import me.exejar.stathead.champstats.utils.Handler;
 import me.exejar.stathead.commands.SetApi;
+import me.exejar.stathead.commands.StatheadGui;
 import me.exejar.stathead.events.render.AboveHeadDisplay;
 import me.exejar.stathead.events.HeadDisplayTick;
 import me.exejar.stathead.events.render.TagRenderer;
@@ -42,7 +43,7 @@ public class Main {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         tagDisplay = new AboveHeadDisplay();
-        registerCommands(new SetApi());
+        registerCommands(new SetApi(), new StatheadGui());
         registerListeners(new TagRenderer(this), new HeadDisplayTick(tagDisplay));
     }
 
