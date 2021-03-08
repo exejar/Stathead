@@ -1,6 +1,7 @@
 package me.exejar.stathead.exejarclick.clickgui.components;
 
 import me.exejar.stathead.Main;
+import me.exejar.stathead.champstats.config.ModConfig;
 import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.exejarclick.clickgui.ClickGui;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
@@ -58,21 +59,22 @@ public class EntryButton extends Component {
                 List<String> gameStats = new ArrayList<>();
 
                 if (EnumUtils.isValidEnum(HypixelGames.class, this.name.toUpperCase())) {
+                    ModConfig.getInstance().setStatMode(this.name);
+
                     String[] statNames = HypixelGames.valueOf(this.name.toUpperCase()).getStatNames();
                     gameStats.addAll(Arrays.asList(statNames));
                     this.listParent.parent.refreshList(gameStats);
                 }
             }
 
-            selected = true;
+            setSelected(true);
         } else if (this.listParent.isMouseOnEntryList(mouseX, mouseY)) {
-            selected = false;
+            setSelected(false);
         }
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-
     }
 
     @Override
@@ -85,7 +87,11 @@ public class EntryButton extends Component {
     }
 
     public void setSelected(boolean selected) {
-        /* Add config save method here */
+        if (!this.listParent.gameList) {
+            if (selected) {
+                ModConfig.getInstance().setStatName(this.name);
+            }
+        }
         this.selected = selected;
     }
 

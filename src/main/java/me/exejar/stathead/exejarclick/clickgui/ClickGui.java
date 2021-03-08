@@ -1,6 +1,7 @@
 package me.exejar.stathead.exejarclick.clickgui;
 
 import me.exejar.stathead.Main;
+import me.exejar.stathead.champstats.config.ModConfig;
 import me.exejar.stathead.exejarclick.clickgui.components.Component;
 import me.exejar.stathead.exejarclick.clickgui.components.Frame;
 import net.minecraft.client.gui.GuiScreen;
@@ -65,6 +66,11 @@ public class ClickGui extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() { return false; }
+
+    @Override
+    public void onGuiClosed() {
+        ModConfig.getInstance().save();
+    }
 
     public void setRainbow(boolean rainbow) { this.rainbow = rainbow; }
 

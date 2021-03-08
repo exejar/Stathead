@@ -84,7 +84,6 @@ public class ListDisplay extends Component {
     @Override
     public void setOff(int newOff) {
         int spacer = newOff;
-        System.out.println(spacer);
 
         for (Component component : this.subComponents) {
             component.setOff(spacer);
