@@ -32,7 +32,7 @@ public class ClickGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         if (rainbow) {
-            color = Color.HSBtoRGB(System.currentTimeMillis() % 1500L / 1500.0f, 0.7f, 1.0f);
+            color = Color.HSBtoRGB(System.currentTimeMillis() % 8000L / 8000.0F, 0.7f, 1.0f);
         } else {
             color = headerColor.getRGB();
         }

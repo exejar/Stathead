@@ -1,9 +1,7 @@
-package me.exejar.stathead.exejarclick.clickgui.components.sub;
+package me.exejar.stathead.exejarclick.clickgui.components;
 
 import me.exejar.stathead.Main;
 import me.exejar.stathead.exejarclick.clickgui.ClickGui;
-import me.exejar.stathead.exejarclick.clickgui.components.Component;
-import me.exejar.stathead.exejarclick.clickgui.components.Frame;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
 
 import java.awt.*;
@@ -120,7 +118,7 @@ public class ListDisplay extends Component {
                 button.setSelected(true);
             }
 
-            comp.add(new EntryButton(s, this, spacer, elementHeight));
+            comp.add(button);
             spacer += elementHeight;
         }
 

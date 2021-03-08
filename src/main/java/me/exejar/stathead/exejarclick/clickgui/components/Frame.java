@@ -2,7 +2,6 @@ package me.exejar.stathead.exejarclick.clickgui.components;
 
 import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.exejarclick.clickgui.ClickGui;
-import me.exejar.stathead.exejarclick.clickgui.components.sub.ListDisplay;
 import me.exejar.stathead.exejarclick.clickgui.util.CustomFontRenderer;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
 

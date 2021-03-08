@@ -8,7 +8,7 @@ import me.exejar.stathead.utils.References;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
-public class SetApi extends BLHCommandBase {
+public class SetApi extends SHCommandBase {
     @Override
     public String getCommandName() {
         return "setapi";

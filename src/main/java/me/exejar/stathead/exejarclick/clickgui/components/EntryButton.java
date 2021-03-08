@@ -1,9 +1,8 @@
-package me.exejar.stathead.exejarclick.clickgui.components.sub;
+package me.exejar.stathead.exejarclick.clickgui.components;
 
 import me.exejar.stathead.Main;
 import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.exejarclick.clickgui.ClickGui;
-import me.exejar.stathead.exejarclick.clickgui.components.Component;
 import me.exejar.stathead.exejarclick.clickgui.util.RenderingUtils;
 import org.apache.commons.lang3.EnumUtils;
 
