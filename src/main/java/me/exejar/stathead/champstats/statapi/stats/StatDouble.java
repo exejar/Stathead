@@ -26,7 +26,7 @@ public class StatDouble extends Stat {
     @Override
     public void setStat() {
         try {
-            this.value = Double.parseDouble(gameObject.get(jsonName).toString());
+            this.value = gameObject.get(jsonName).getAsDouble();
         } catch (NullPointerException ex) {
             this.value = 0;
         }

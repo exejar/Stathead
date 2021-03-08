@@ -22,7 +22,7 @@ public class StatLong extends Stat {
     @Override
     public void setStat() {
         try {
-            this.value = Long.parseLong(gameObject.get(jsonName).toString());
+            this.value = gameObject.get(jsonName).getAsLong();
         } catch (NullPointerException ex) {
             this.value = 0;
         }

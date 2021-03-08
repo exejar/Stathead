@@ -26,7 +26,7 @@ public class StatString extends Stat {
     @Override
     public void setStat() {
         try {
-            this.value = gameObject.get(jsonName).toString();
+            this.value = gameObject.get(jsonName).getAsString();
         } catch (NullPointerException ex) {
             this.value = "";
         }

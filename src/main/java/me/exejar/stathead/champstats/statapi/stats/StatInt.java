@@ -26,7 +26,7 @@ public class StatInt extends Stat {
     @Override
     public void setStat() {
         try {
-            this.value = Integer.parseInt(gameObject.get(jsonName).toString());
+            this.value = gameObject.get(jsonName).getAsInt();
         } catch (NullPointerException ex) {
             this.value = 0;
         }
