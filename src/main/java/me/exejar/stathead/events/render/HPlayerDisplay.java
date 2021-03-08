@@ -1,6 +1,7 @@
 package me.exejar.stathead.events.render;
 
 import me.exejar.stathead.champstats.statapi.HPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +16,7 @@ public abstract class HPlayerDisplay {
 
     protected final ConcurrentHashMap<UUID, HPlayer> cache = new ConcurrentHashMap<>();
     protected final List<UUID> statAssembly = new ArrayList<>();
-    protected final List<UUID> existedMoreThan5Seconds = new ArrayList<>();
+    protected final List<EntityPlayer> existedMoreThan5Seconds = new ArrayList<>();
     protected final Map<UUID, Integer> timeCheck = new HashMap<>();
 
     public abstract void onTick();
@@ -28,7 +29,7 @@ public abstract class HPlayerDisplay {
         return this.cache;
     }
 
-    public List<UUID> getExistedMoreThan5Seconds() {
+    public List<EntityPlayer> getExistedMoreThan5Seconds() {
         return this.existedMoreThan5Seconds;
     }
 

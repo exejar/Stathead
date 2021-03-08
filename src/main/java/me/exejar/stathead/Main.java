@@ -1,13 +1,16 @@
 package me.exejar.stathead;
 
+import me.exejar.stathead.champstats.config.ModConfig;
 import me.exejar.stathead.champstats.statapi.HGameBase;
 import me.exejar.stathead.champstats.statapi.HPlayer;
+import me.exejar.stathead.champstats.statapi.HWorld;
 import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.champstats.statapi.bedwars.Bedwars;
 import me.exejar.stathead.champstats.statapi.general.General;
 import me.exejar.stathead.champstats.utils.Handler;
 import me.exejar.stathead.commands.SetApi;
 import me.exejar.stathead.commands.StatheadGui;
+import me.exejar.stathead.events.ApiNewEvent;
 import me.exejar.stathead.events.render.AboveHeadDisplay;
 import me.exejar.stathead.events.HeadDisplayTick;
 import me.exejar.stathead.events.render.TagRenderer;
@@ -33,9 +36,12 @@ public class Main {
 
     private static Main instance;
     public static CustomFontRenderer fontRenderer;
+    private HWorld hWorld;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        ModConfig.getInstance().init();
+        this.hWorld = new HWorld();
         instance = this;
         fontRenderer = new CustomFontRenderer(new Font("Tahoma", Font.PLAIN, 16), true);
     }
@@ -44,7 +50,7 @@ public class Main {
     public void init(FMLInitializationEvent event) {
         tagDisplay = new AboveHeadDisplay();
         registerCommands(new SetApi(), new StatheadGui());
-        registerListeners(new TagRenderer(this), new HeadDisplayTick(tagDisplay));
+        registerListeners(new TagRenderer(this), new HeadDisplayTick(tagDisplay), new ApiNewEvent());
     }
 
     @Mod.EventHandler
@@ -65,29 +71,23 @@ public class Main {
 
     public AboveHeadDisplay getTagDisplay() { return this.tagDisplay; }
 
-    public void fetchStats(EntityPlayer entityPlayer, HypixelGames game) {
+    public void fetchStats(EntityPlayer entityPlayer) {
         Handler.asExecutor(()-> {
             final UUID uuid = entityPlayer.getUniqueID();
-            HGameBase gameBase = null;
 
-            /* need to find a better way of doing this async..im lazy :p */
-            switch (game) {
-                case GENERAL:
-                    gameBase = new General(entityPlayer.getName(), uuid.toString().replace("-", ""));
-                    break;
-                case BEDWARS:
-                    gameBase = new Bedwars(entityPlayer.getName(), uuid.toString().replace("-", ""));
-                    break;
-            }
+            Bedwars bw = new Bedwars(entityPlayer.getName(), uuid.toString().replace("-", ""));
+            General general = new General(entityPlayer.getName(), uuid.toString().replace("-", ""));
 
-            if (gameBase == null) {
-                return;
-            }
+            HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), bw, general);
 
-            HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), gameBase);
+            this.theHWorld().addPlayer(entityPlayer, hPlayer);
 
-            tagDisplay.getCache().put(uuid, hPlayer);
             tagDisplay.removeFromStatAssembly(uuid);
         });
     }
+
+    public HWorld theHWorld() {
+        return this.hWorld;
+    }
+
 }

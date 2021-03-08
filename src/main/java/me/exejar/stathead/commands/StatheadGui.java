@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class StatheadGui extends SHCommandBase {
 
+    public ClickGui clickGui;
+
     @Override
     public String getCommandName() {
         return "stathead";
@@ -27,7 +29,8 @@ public class StatheadGui extends SHCommandBase {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        Minecraft.getMinecraft().displayGuiScreen(new ClickGui());
+        if (this.clickGui == null) this.clickGui = new ClickGui();
+        Minecraft.getMinecraft().displayGuiScreen(this.clickGui);
         MinecraftForge.EVENT_BUS.unregister(this);
     }
 

@@ -1,13 +1,13 @@
 package me.exejar.stathead.events.render;
 
 import me.exejar.stathead.Main;
-import me.exejar.stathead.champstats.statapi.HypixelGames;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AboveHeadDisplay extends HPlayerDisplay {
@@ -43,7 +43,7 @@ public class AboveHeadDisplay extends HPlayerDisplay {
         return !(player.getDistanceSqToEntity(Minecraft.getMinecraft().thePlayer) > renderDistance)
                 && (!player.hasCustomName() || !player.getCustomNameTag().isEmpty())
                 && !player.getDisplayNameString().isEmpty()
-                && existedMoreThan5Seconds.contains(player.getUniqueID())
+                && existedMoreThan5Seconds.contains(player)
                 && !player.isSneaking();
     }
 
@@ -73,22 +73,22 @@ public class AboveHeadDisplay extends HPlayerDisplay {
     @Override
     public void onTick() {
         for (EntityPlayer entityPlayer : Minecraft.getMinecraft().theWorld.playerEntities) {
-            if (!existedMoreThan5Seconds.contains(entityPlayer.getUniqueID())) {
+            if (!existedMoreThan5Seconds.contains(entityPlayer)) {
                 if (!timeCheck.containsKey(entityPlayer.getUniqueID()))
                     timeCheck.put(entityPlayer.getUniqueID(), 0);
                 int old = timeCheck.get(entityPlayer.getUniqueID());
                 if (old > 100) {
-                    if (!existedMoreThan5Seconds.contains(entityPlayer.getUniqueID()))
-                        existedMoreThan5Seconds.add(entityPlayer.getUniqueID());
+                    if (!existedMoreThan5Seconds.contains(entityPlayer))
+                        existedMoreThan5Seconds.add(entityPlayer);
                 } else if (!entityPlayer.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer))
                     timeCheck.put(entityPlayer.getUniqueID(), old + 1);
             }
 
             if (loadOrRender(entityPlayer)) {
                 final UUID uuid = entityPlayer.getUniqueID();
-                if (!cache.containsKey(uuid) && !statAssembly.contains(uuid)) {
+                if (!Main.getInstance().theHWorld().getWorldPlayers().containsKey(entityPlayer) && !statAssembly.contains(uuid)) {
                     statAssembly.add(uuid);
-                    Main.getInstance().fetchStats(entityPlayer, HypixelGames.GENERAL);
+                    Main.getInstance().fetchStats(entityPlayer);
                 }
             }
         }
@@ -98,19 +98,19 @@ public class AboveHeadDisplay extends HPlayerDisplay {
     public void checkCacheSize() {
         int max = Math.max(150, 500);
         if (cache.size() > max) {
-            ArrayList<UUID> safePlayers = new ArrayList<>();
+            List<EntityPlayer> safePlayers = new ArrayList<>();
             for (EntityPlayer player : Minecraft.getMinecraft().theWorld.playerEntities) {
-                if (existedMoreThan5Seconds.contains(player.getUniqueID())) {
-                    safePlayers.add(player.getUniqueID());
+                if (existedMoreThan5Seconds.contains(player)) {
+                    safePlayers.add(player);
                 }
             }
 
             existedMoreThan5Seconds.clear();
             existedMoreThan5Seconds.addAll(safePlayers);
 
-            for (UUID uuid : cache.keySet()) {
-                if (!safePlayers.contains(uuid)) {
-                    cache.remove(uuid);
+            for (EntityPlayer player : Main.getInstance().theHWorld().getWorldPlayers().keySet()) {
+                if (!safePlayers.contains(player)) {
+                    Main.getInstance().theHWorld().removePlayer(player);
                 }
             }
         }
@@ -118,6 +118,7 @@ public class AboveHeadDisplay extends HPlayerDisplay {
 
     @Override
     public void onDelete() {
+        Main.getInstance().theHWorld().clearPlayers();
         cache.clear();
         existedMoreThan5Seconds.clear();
     }

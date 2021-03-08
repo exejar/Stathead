@@ -25,11 +25,13 @@ public class General extends GeneralUtils {
     public General(String playerName, String playerUUID) {
         super(playerName, playerUUID);
         statList = new ArrayList<>();
+        formattedStatList = new ArrayList<>();
         if (setData(HypixelGames.GENERAL)) {
+            this.playersJson = this.playersJson.get("player").getAsJsonObject();
             statList = setStats(
-                    exp = new StatLong("EXP", "networkExp", playersJson),
+                    exp = new StatLong("EXP", "networkExp", this.playersJson),
 //                    quests = new StatInt("Quest", "", playersJson),
-                    achpoints = new StatLong("AP", "achievementPoints", playersJson)
+                    achpoints = new StatLong("AP", "achievementPoints", this.playersJson)
             );
         } else {
             formattedStatList.add(new StatString("Level", ChatColor.RED + "NICKED"));
@@ -100,7 +102,7 @@ public class General extends GeneralUtils {
         level.setValue(ChatColor.GREEN + getNetworkLevel(((StatLong)this.exp).getValue()));
         formattedStatList.add(level);
 
-        StatString achievementPoints = new StatString("AP");
+        StatString achievementPoints = new StatString("Achievement Points");
         achievementPoints.setValue(ChatColor.GREEN + Long.toString(((StatLong)achpoints).getValue()));
         formattedStatList.add(achievementPoints);
     }

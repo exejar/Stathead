@@ -1,7 +1,7 @@
 package me.exejar.stathead.champstats.statapi;
 
 public enum HypixelGames {
-    GENERAL("General", "General", new String[]{"Level", "Achievement Points", "Quests"}),
+    GENERAL("player", "General", new String[]{"Level", "Achievement Points", "Quests"}),
     BEDWARS("Bedwars", "Bedwars", new String[]{"WS", "FKDR", "WLR", "BBLR", "Star"});
 
     private String apiName, gameName;

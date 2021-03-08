@@ -1,5 +1,6 @@
 package me.exejar.stathead.champstats.statapi;
 
+import me.exejar.stathead.Main;
 import me.exejar.stathead.champstats.statapi.stats.Stat;
 
 import java.util.HashMap;

@@ -41,7 +41,7 @@ public class TagRenderer {
 
         AboveHeadDisplay display = main.getTagDisplay();
 
-        HPlayer hPlayer = display.getCache().get(player.getUniqueID());
+        HPlayer hPlayer = Main.getInstance().theHWorld().getWorldPlayers().get(player);
 
         /* No Idea why sk1er had a for loop of multiple displays...? */
 
@@ -96,9 +96,13 @@ public class TagRenderer {
         if (EnumUtils.isValidEnum(HypixelGames.class, config.getStatMode().toUpperCase())) {
             List<Stat> statList = hPlayer.getGameStats(HypixelGames.valueOf(config.getStatMode().toUpperCase()).getGameName());
 
-            for (Stat s : statList) {
-                if (s.getStatName().equalsIgnoreCase(config.getStatName())) {
-                    stat = ((StatString)s).getValue() + " " + s.getStatName();
+//            System.out.println(config.getStatName().toUpperCase());
+
+            if (statList != null) {
+                for (Stat s : statList) {
+                    if (s.getStatName().equalsIgnoreCase(config.getStatName())) {
+                        stat = ((StatString)s).getValue() + " " + s.getStatName();
+                    }
                 }
             }
         }
