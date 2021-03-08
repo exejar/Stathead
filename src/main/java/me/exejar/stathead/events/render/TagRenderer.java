@@ -1,6 +1,7 @@
 package me.exejar.stathead.events.render;
 
 import me.exejar.stathead.Main;
+import me.exejar.stathead.champstats.config.ModConfig;
 import me.exejar.stathead.champstats.statapi.HPlayer;
 import me.exejar.stathead.champstats.statapi.HypixelGames;
 import me.exejar.stathead.champstats.statapi.stats.Stat;
@@ -17,6 +18,7 @@ import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.commons.lang3.EnumUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -89,17 +91,15 @@ public class TagRenderer {
 
         String stat = "";
 
-        /* TODO Update Stat Getter method
-        * List<Stat> statList = hPlayer.getGameStat(config.getGameSelected)
-        * for (Stat s : statList)
-        * if (s.getStateName().equalsIgnoreCase(config.getStatSelected)
-        * stat = ((StatString)s).getValue() + " " + s.getStatName();
-        *
-        */
-        List<Stat> statList = hPlayer.getGameStats(HypixelGames.GENERAL.getGameName());
-        for (Stat s : statList) {
-            if (s.getStatName().equalsIgnoreCase("Level")) {
-                stat = ((StatString)s).getValue() + " " + s.getStatName();
+        ModConfig config = ModConfig.getInstance();
+
+        if (EnumUtils.isValidEnum(HypixelGames.class, config.getStatMode().toUpperCase())) {
+            List<Stat> statList = hPlayer.getGameStats(HypixelGames.valueOf(config.getStatMode().toUpperCase()).getGameName());
+
+            for (Stat s : statList) {
+                if (s.getStatName().equalsIgnoreCase(config.getStatName())) {
+                    stat = ((StatString)s).getValue() + " " + s.getStatName();
+                }
             }
         }
 

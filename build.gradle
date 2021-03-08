@@ -72,5 +72,6 @@ build {
 }
 
 runClient {
+    args '--username', 'morgandave@hotmail.fr', '--password', 'Christelle77'
 }
 
