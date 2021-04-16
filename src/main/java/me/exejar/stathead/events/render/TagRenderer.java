@@ -96,8 +96,6 @@ public class TagRenderer {
         if (EnumUtils.isValidEnum(HypixelGames.class, config.getStatMode().toUpperCase())) {
             List<Stat> statList = hPlayer.getGameStats(HypixelGames.valueOf(config.getStatMode().toUpperCase()).getGameName());
 
-//            System.out.println(config.getStatName().toUpperCase());
-
             if (statList != null) {
                 for (Stat s : statList) {
                     if (s.getStatName().equalsIgnoreCase(config.getStatName())) {

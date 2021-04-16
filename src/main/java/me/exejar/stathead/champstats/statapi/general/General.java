@@ -18,12 +18,13 @@ import java.util.List;
 
 public class General extends GeneralUtils {
 
-    private JsonObject playersJson;
+    private JsonObject playersJson, wholeObject;
     private List<Stat> statList, formattedStatList;
     public Stat exp, quests, achpoints;
 
-    public General(String playerName, String playerUUID) {
+    public General(String playerName, String playerUUID, JsonObject wholeObject) {
         super(playerName, playerUUID);
+        this.wholeObject = wholeObject;
         statList = new ArrayList<>();
         formattedStatList = new ArrayList<>();
         if (setData(HypixelGames.GENERAL)) {
@@ -46,21 +47,10 @@ public class General extends GeneralUtils {
     public boolean setData(HypixelGames game) {
         this.isNicked = false;
         this.hasPlayed = false;
-        JsonObject obj = null;
-        boolean isFunctional = false;
+        JsonObject obj = wholeObject;
 
         try {
-            obj = getPlayerData(getPlayerUUID());
-            isFunctional = true;
-        } catch (ApiRequestException ignored) {
-        } catch (PlayerNullException ex) {
-            this.isNicked = true;
-        } catch (InvalidKeyException ex) {
-            ChatUtils.sendMessage(ChatColor.RED + "Invalid API Key");
-        }
-
-        try {
-            if (!this.isNicked && isFunctional) {
+            if (!this.isNicked) {
                 this.hasPlayed = true;
                 this.playersJson = obj;
                 return true;

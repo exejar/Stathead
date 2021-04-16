@@ -18,13 +18,14 @@ import java.util.List;
 
 public class Bedwars extends BedwarsUtils {
 
-    private JsonObject bedwarsJson;
+    private JsonObject bedwarsJson, wholeObject;
     private List<Stat> statList;
     private List<Stat> formattedStatList;
     public Stat gamesPlayed, finalKills, finalDeaths, wins, losses, kills, deaths, bedsBroken, bedsLost, winstreak, star;
 
-    public Bedwars(String playerName, String playerUUID) {
+    public Bedwars(String playerName, String playerUUID, JsonObject wholeObject) {
         super(playerName, playerUUID);
+        this.wholeObject = wholeObject;
         statList = new ArrayList<>();
         if (setData(HypixelGames.BEDWARS)) {
             formattedStatList = new ArrayList<>();
@@ -39,14 +40,15 @@ public class Bedwars extends BedwarsUtils {
                     deaths = new StatInt("Deaths", "deaths_bedwars", bedwarsJson),
                     bedsBroken = new StatInt("Beds Broken", "beds_broken_bedwars", bedwarsJson),
                     bedsLost = new StatInt("Beds Lost", "beds_lost_bedwars", bedwarsJson),
-                    winstreak = new StatInt("Winstreak", "winstreak_bedwars", bedwarsJson));
+                    winstreak = new StatInt("Winstreak", "winstreak", bedwarsJson));
         } else {
             formattedStatList.add(new StatString("Star", ChatColor.RED + "NICKED"));
         }
     }
 
-    public Bedwars(String playerName, String playerUUID, HPlayer hPlayer) {
+    public Bedwars(String playerName, String playerUUID, HPlayer hPlayer, JsonObject wholeObject) {
         super(playerName, playerUUID);
+        this.wholeObject = wholeObject;
         if (setData(HypixelGames.BEDWARS)) {
             statList = new ArrayList<>();
             formattedStatList = new ArrayList<>();
@@ -70,21 +72,10 @@ public class Bedwars extends BedwarsUtils {
     public boolean setData(HypixelGames game) {
         this.isNicked = false;
         this.hasPlayed = false;
-        JsonObject obj = null;
-        boolean isFunctional = false;
+        JsonObject obj = getGameData(wholeObject, game);
 
         try {
-            obj = getGameData(getPlayerUUID(), game);
-            isFunctional = true;
-        } catch (ApiRequestException ignored) {
-        } catch (PlayerNullException ex) {
-            this.isNicked = true;
-        } catch (InvalidKeyException ex) {
-            ChatUtils.sendMessage(ChatColor.RED + "Invalid API Key");
-        }
-
-        try {
-            if (!this.isNicked && isFunctional) {
+            if (!this.isNicked) {
                 this.hasPlayed = true;
                 this.bedwarsJson = obj;
                 return true;

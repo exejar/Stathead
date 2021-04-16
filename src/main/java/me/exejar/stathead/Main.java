@@ -1,11 +1,12 @@
 package me.exejar.stathead;
 
+import com.google.gson.JsonObject;
 import me.exejar.stathead.champstats.config.ModConfig;
-import me.exejar.stathead.champstats.statapi.HGameBase;
-import me.exejar.stathead.champstats.statapi.HPlayer;
-import me.exejar.stathead.champstats.statapi.HWorld;
-import me.exejar.stathead.champstats.statapi.HypixelGames;
+import me.exejar.stathead.champstats.statapi.*;
 import me.exejar.stathead.champstats.statapi.bedwars.Bedwars;
+import me.exejar.stathead.champstats.statapi.exception.ApiRequestException;
+import me.exejar.stathead.champstats.statapi.exception.InvalidKeyException;
+import me.exejar.stathead.champstats.statapi.exception.PlayerNullException;
 import me.exejar.stathead.champstats.statapi.general.General;
 import me.exejar.stathead.champstats.utils.Handler;
 import me.exejar.stathead.commands.SetApi;
@@ -73,14 +74,31 @@ public class Main {
 
     public void fetchStats(EntityPlayer entityPlayer) {
         Handler.asExecutor(()-> {
+            /* TODO Only use one instance of HypixelAPI.class rather than creating new ones for each Gamemode (Bedwars and General are both child class instances of HypixelAPI) */
             final UUID uuid = entityPlayer.getUniqueID();
 
-            Bedwars bw = new Bedwars(entityPlayer.getName(), uuid.toString().replace("-", ""));
-            General general = new General(entityPlayer.getName(), uuid.toString().replace("-", ""));
+            JsonObject wholeObject = null;
+            try {
+                wholeObject = new HypixelAPI().getWholeObject(uuid.toString().replace("-", ""));
+            } catch (PlayerNullException e) {
+                /* Player is nicked...maybe add a method to detect this from the HPlayer instance? */
+                e.printStackTrace();
+            } catch (InvalidKeyException e) {
+                /* Invalid Hypixel API key */
+                e.printStackTrace();
+            } catch (ApiRequestException e) {
+                /* Hypixel's Api is kinda poopoo */
+                e.printStackTrace();
+            }
 
-            HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), bw, general);
+            if (wholeObject != null) {
+                Bedwars bw = new Bedwars(entityPlayer.getName(), uuid.toString().replace("-", ""), wholeObject);
+                General general = new General(entityPlayer.getName(), uuid.toString().replace("-", ""), wholeObject);
 
-            this.theHWorld().addPlayer(entityPlayer, hPlayer);
+                HPlayer hPlayer = new HPlayer(uuid.toString().replace("-", ""), entityPlayer.getName(), bw, general);
+
+                this.theHWorld().addPlayer(entityPlayer, hPlayer);
+            }
 
             tagDisplay.removeFromStatAssembly(uuid);
         });

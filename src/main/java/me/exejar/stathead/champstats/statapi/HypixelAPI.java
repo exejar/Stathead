@@ -22,14 +22,13 @@ public class HypixelAPI {
     public JsonObject achievementObj;
 
     /**
-     * @param uuid Target Player's UUID
-     * @param game Game Stats to retrieve
-     * @return JsonObject of the specified gameType's Stats
+     * @param uuid Target player's UUID
+     * @return JsonObject of the player's whole api result
      * @throws InvalidKeyException If Hypixel API Key is Invalid
      * @throws PlayerNullException If Target Player UUID is returned Null from the Hypixel API
      * @throws ApiRequestException If any other exception is thrown during the request
      */
-    public JsonObject getGameData(String uuid, HypixelGames game) throws InvalidKeyException, PlayerNullException, ApiRequestException {
+    public JsonObject getWholeObject(String uuid) throws InvalidKeyException, PlayerNullException, ApiRequestException {
         JsonObject obj = new JsonObject();
         if (key == null) {
             throw new InvalidKeyException();
@@ -51,50 +50,25 @@ public class HypixelAPI {
                 else if (obj.get("success").getAsString().equals("false"))
                     throw new ApiRequestException();
             } catch (IOException ex) {
-                System.err.println(References.MODNAME + " setGameData: " + ex.getStackTrace().toString());
+                System.err.println(References.MODNAME + " setGameData: ");
+                ex.printStackTrace();
             }
         }
 
         JsonObject player = obj.get("player").getAsJsonObject();
-
         this.achievementObj = player.get("achievements").getAsJsonObject();
-
-        JsonObject stats = player.get("stats").getAsJsonObject();
-        obj = stats.get(game.getApiName()).getAsJsonObject();
-
         return obj;
     }
 
-    public JsonObject getPlayerData(String uuid) throws InvalidKeyException, PlayerNullException, ApiRequestException {
-        JsonObject obj = new JsonObject();
-        if (key == null) {
-            throw new InvalidKeyException();
-        } else {
-            String requestURL = String.format("https://api.hypixel.net/player?key=%s&uuid=%s", key, uuid.replace("-", ""));
-            try (CloseableHttpClient client = HttpClients.createDefault()) {
-                HttpGet request = new HttpGet(requestURL);
-                JsonParser parser = new JsonParser();
-
-                obj = parser.parse(new InputStreamReader(client.execute(request).getEntity().getContent(), StandardCharsets.UTF_8)).getAsJsonObject();
-                System.out.println(References.MODNAME + " Stat Checking: " + uuid);
-
-                if (obj.get("player") == null) {
-                    if (obj.get("cause").getAsString().equalsIgnoreCase("Invalid API key")) throw new InvalidKeyException();
-                    throw new PlayerNullException();
-                }
-                else if (obj.get("player").toString().equalsIgnoreCase("null"))
-                    throw new PlayerNullException();
-                else if (obj.get("success").getAsString().equals("false"))
-                    throw new ApiRequestException();
-            } catch (IOException ex) {
-                System.err.println(References.MODNAME + " setGameData: " + ex.getStackTrace().toString());
-            }
-        }
-
-        JsonObject player = obj.get("player").getAsJsonObject();
-        this.achievementObj = player.get("achievements").getAsJsonObject();
-
-        return obj;
+    /**
+     * @param wholeObject Target Player's Hypixel API Whole Object
+     * @param game Game Stats to retrieve
+     * @return JsonObject of the specified gameType's Stats
+     */
+    public JsonObject getGameData(JsonObject wholeObject, HypixelGames game) {
+        JsonObject player = wholeObject.get("player").getAsJsonObject();
+        JsonObject stats = player.get("stats").getAsJsonObject();
+        return stats.get(game.getApiName()).getAsJsonObject();
     }
 
     @Deprecated
